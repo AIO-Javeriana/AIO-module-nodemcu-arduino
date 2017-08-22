@@ -37,7 +37,7 @@ void SIOCommnuicationChannel::setup(const char * module_info,
     this->_webSocket.on(toString(CommunicationEventsTypes::WORK_STATUS),onWORK_STATUS );
     this->_webSocket.on(toString(CommunicationEvents::ALL_BEGINS),onALL_BEGINS );
     this->_webSocket.begin(this->_host, this->_port, "/socket.io/?transport=websocket");
-    this->_webSocket.emit("REGISTRATION",module_info);
+    this->_webSocket.emit(toString(CommunicationEvents::REGISTRATION),module_info);
 }
 
 void SIOCommnuicationChannel::loop(){

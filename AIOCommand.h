@@ -30,10 +30,10 @@ class AIOActionCommand: public AIOCommand{
         std::function<bool (AIOState& state)> _acceptWork;
         std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> _executeService;
     public:
-         AIOActionCommand(char* name,std::vector<char*> params,bool interruptible,bool service,std::function<bool (AIOState& state)> acceptWork,std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> executeService);
-         std::function<bool (AIOState& state)> getAcceptWork();
+         AIOActionCommand(char* name,std::vector<char*> &params,bool interruptible,bool service,std::function<bool (AIOState& state)> acceptWork,std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> executeService);
+         std::function<bool (AIOState& state)> getIsAcceptWork();
          void setAcceptWork(std::function<bool (AIOState& state)> acceptWork);
-         std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> getESxecuteService();
+         std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> getExecuteService();
          void setExecuteService(std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> executeService);
 };
 
@@ -42,7 +42,7 @@ class AIOServiceCommand: public AIOCommand{
         std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> _executeService;
     public:
          AIOServiceCommand(char* name,std::vector<char*> params,bool interruptible,bool service,std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> executeService);
-         std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> getESxecuteService();
+         std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> getExecuteService();
          void setExecuteService(std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> executeService);        
 };
 

@@ -11,17 +11,21 @@
 #include "AIOState.h"
 #include "AIOCommand.h"
 #include "CommunicationChannel.h"
+#include "CommunicationEvents.h"
 
 #define PRINT(...) Serial.printf(__VA_ARGS__);
-#define COMMAND_NAME char*
-#define GROUP_ID char*
-#define COMMAND_ID char*
+#define PRINTLN(...) Serial.println(__VA_ARGS__);
+#define COMMAND_NAME String
+#define GROUP_ID String
+#define COMMAND_ID String
+#define BUFFER_CAPACITY 500
+
+using namespace CommunicationEvents;
 
 class AIOModule {
     private:
         AIOState _state;
         CommunicationChannel* _communicationChannel;
-        StaticJsonBuffer<200> _jsonBuffer;
         std::map<COMMAND_NAME, AIOActionCommand*> _actions;
         std::map<COMMAND_NAME, AIOServiceCommand*> _services;
         std::map<GROUP_ID, std::vector<std::pair<COMMAND_ID, AIOActionCommand*> > > _actionInQueue;

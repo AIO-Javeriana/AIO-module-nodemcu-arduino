@@ -11,8 +11,8 @@
 #include "AIOCommand.h"
 
 
-char* ssid = "....";
-char* password = "....";
+char* ssid = "BERMEOA";
+char* password = "Meje015$";
 
 char* host = "192.168.0.8";
 int port = 9090;

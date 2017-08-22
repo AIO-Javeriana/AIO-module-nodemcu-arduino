@@ -39,14 +39,14 @@ void AIOCommand::setService(bool service){
     this->_service = service;
 }
 
-AIOActionCommand::AIOActionCommand(char* name,std::vector<char*> params,bool interruptible,bool service,std::function<bool (AIOState& state)> acceptWork,std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> executeService)
+AIOActionCommand::AIOActionCommand(char* name,std::vector<char*>& params,bool interruptible,bool service,std::function<bool (AIOState& state)> acceptWork,std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> executeService)
                 :AIOCommand(name,params,interruptible,service){
      this->_acceptWork = acceptWork;
      this->_executeService = executeService;
 }
         
 
-std::function<bool (AIOState& state)> AIOActionCommand::getAcceptWork(){
+std::function<bool (AIOState& state)> AIOActionCommand::getIsAcceptWork(){
     return this->_acceptWork;
 }
 
@@ -55,7 +55,7 @@ void AIOActionCommand::setAcceptWork(std::function<bool (AIOState& state)> accep
 
 }
 
-std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> AIOActionCommand::getESxecuteService(){
+std::function<bool (AIOState& state,CommunicationChannel*& communicationChannel)> AIOActionCommand::getExecuteService(){
     return this->_executeService;
 }
 
@@ -69,7 +69,7 @@ AIOServiceCommand::AIOServiceCommand(char* name,std::vector<char*> params,bool i
     this->_executeService = executeService;
 }
 
-std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> AIOServiceCommand::getESxecuteService(){
+std::function<char* (AIOState& state,CommunicationChannel*& communicationChannel)> AIOServiceCommand::getExecuteService(){
     return this->_executeService;
 }
 
