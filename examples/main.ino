@@ -11,13 +11,11 @@
 #include "AIOCommand.h"
 
 
-char* ssid = "....";
-char* password = "....";
-
-char* host = "192.168.0.8";
-int port = 9090;
-
-SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance(host,port);
+char* ssid = "AIO";
+char* password = "";
+bool isSync = false;
+char* host = "192.168.0.9";
+SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance();
 AIOState state("NODEMCU");
 AIOModule& module=AIOModule::getInstance();
 bool acceptWorkATTENTION_CYCLE(AIOState& state){
@@ -26,6 +24,7 @@ bool acceptWorkATTENTION_CYCLE(AIOState& state){
 }
 
 bool executeServiceATTENTION_CYCLE(AIOState& state,CommunicationChannel*& communicationChannel){
+    delay(1000);
     return true;
 }
 
@@ -36,19 +35,6 @@ void setup() {
   params.push_back("none");
   Serial.begin(115200);
   Serial.println();
-  DynamicJsonBuffer jsonBuffer;
-  String nn = String((const char*)"{\\\"EVENT_NAME\\\":\\\"WORK_ASSIGNATION\\\",\\\"COMMAND_ID\\\":8,\\\"COMMAND\\\":\\\"ATTENTION_CYCLE\\\",\\\"PARAMS\\\":{\\\"EMOTIONAL_VALUE\\\":1},\\\"GROUP_ID\\\":8}");
-  nn.replace("\\","");
-  Serial.println(nn);
-  JsonObject& data = jsonBuffer.parseObject(nn.c_str());
-  if (!data.success()){
-        Serial.println("parseObject() failed");
-        return;
-  }
-  Serial.print("->>>>>>>>> ");
-  Serial.print((const char*)data["EVENT_NAME"]);
-  Serial.println(" <<<<-----");
-  
   module.setState(state);
   module.setCommunicationChannel(&commnuicationChannel);
   module.addCommand(attention_cycle);
@@ -65,10 +51,28 @@ void setup() {
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
+  
+  moduleSync();
+  //*/
+}
+
+void moduleSync(){
+  /*
+  commnuicationChannel.setHost(host);
+  commnuicationChannel.setPort(9090);
   module.setup();
+  isSync = true;//*/
+  if ((isSync = commnuicationChannel.syncWithAIO())){
+      Serial.printf("Sync with %s:%d \n",commnuicationChannel.getHost(),commnuicationChannel.getPort());
+      module.setup();
+  } 
   //*/
 }
 
 void loop() {
-  module.loop();
+  if (isSync){
+     module.loop();
+  }else {
+    moduleSync();
+  }
 }

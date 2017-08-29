@@ -2,6 +2,9 @@
 #define __SIO_COMMUNICATION_CHANNEL_H__
 
 #include <Arduino.h>
+#include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
+#include <string.h>
 #include "CommunicationChannel.h"
 #include "CommunicationEvents.h"
 #include "SocketIO_Client.h"
@@ -17,7 +20,6 @@ class SIOCommnuicationChannel: public CommunicationChannel{
         SocketIO_Client _webSocket;
         char* _host;
         int _port;
-
         
         static void _onDisconnected(const char * payload, size_t length);
         void onDisconnected(const char * payload, size_t length);
@@ -27,7 +29,10 @@ class SIOCommnuicationChannel: public CommunicationChannel{
     public:
         static SIOCommnuicationChannel& getInstance();
         static SIOCommnuicationChannel& getInstance(char * host,int port);
-
+        
+        bool syncWithAIO();
+        bool syncWithAIO(int port);
+        
         void setup(const char * module_info,
                     std::function < void (const char * payload, size_t length)> onREGISTRATION_REPLY,
                     std::function < void (const char * payload, size_t length)> onWORK_ASSIGNATION,

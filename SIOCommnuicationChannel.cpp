@@ -12,6 +12,29 @@ SIOCommnuicationChannel& SIOCommnuicationChannel::getInstance(char * host,int po
     _communicationChannel.setPort(port);
     return _communicationChannel;
 }
+bool SIOCommnuicationChannel::syncWithAIO(){
+    return this->syncWithAIO(9090);
+}
+
+bool SIOCommnuicationChannel::syncWithAIO(int port){
+    WiFiUDP udp;
+    udp.begin(1003);
+    udp.beginMulticast(WiFi.localIP(), IPAddress(233,255,255,250),1003 );
+    unsigned long startTime = millis();
+    unsigned long timeLimit = 20000;
+    while (millis() - startTime < timeLimit ) {
+            if (udp.parsePacket()){
+                this->setHost((char *)udp.remoteIP().toString().c_str());
+                this->setPort(port);
+                udp.stop();
+                udp.stopAll();
+                return true;
+            }
+    }
+    udp.stop();
+    udp.stopAll();
+    return false;
+}
 
 SIOCommnuicationChannel::SIOCommnuicationChannel(void){
 
@@ -61,7 +84,8 @@ int   SIOCommnuicationChannel::getPort(){
 }
 
 void  SIOCommnuicationChannel::setHost(char * host){
-    this->_host = host;
+    this->_host = new char[strlen(host)];
+    strcpy(this->_host,host);
 }
 
 void  SIOCommnuicationChannel::setPort(int port){
