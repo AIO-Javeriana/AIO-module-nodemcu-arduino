@@ -5,8 +5,8 @@
 #include <ESP8266WiFi.h>
 #include <WiFiUdp.h>
 #include <string.h>
-#include "CommunicationChannel.h"
-#include "CommunicationEvents.h"
+#include "../communicationChannel/CommunicationChannel.h"
+#include "../communicationChannel/CommunicationEvents.h"
 #include "SocketIO_Client.h"
 
 

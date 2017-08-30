@@ -1,0 +1,19 @@
+{
+  "name": "AIOModule",
+  "keywords": "wifi, module, client, websocket, socket.io, nodemcu, AIO",
+  "description": "This a framework for creating AIO modules in Arduino",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/AIO-Javeriana/AIO-module-nodemcu-arduino"
+  },
+  "exclude": "tests",
+  "frameworks": "arduino",
+  "platforms": "*",
+  "authors":
+  {
+    "name": "bermeom",
+    "url": "https://github.com/bermeom",
+    "maintainer": true
+  }
+}

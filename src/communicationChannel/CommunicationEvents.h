@@ -11,6 +11,7 @@ namespace CommunicationEvents{
         WORK_ASSIGNATION_REPLY,
         WORK_STATUS,
         WORK_STATUS_REPLY,
+        ABORT_WORK,
         ALL_BEGINS,
         ACTION_FINISHED,
         GET_SENSOR_SERVICES,
@@ -24,7 +25,11 @@ namespace CommunicationEvents{
         NECESSITY_FOR_MODULE,
         FINISHED_EXECUTE_COMMAND,
         COMMANDS_ASSIGNATION,
+        MODULE_REGISTRATION_SERVICE,
+        POSSIBLE_SUPPLIER,
         NOT_DEFINED
+
+        
     };
     char* toString(CommunicationEventsTypes c);
 
