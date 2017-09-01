@@ -9,7 +9,8 @@ class AIOState {
     public:
          AIOState(char* module_id);
          char* getModule_id();
-         void setModule_id(char* module_id);        
+         void setModule_id(char* module_id); 
+         virtual ~AIOState();     
 };
 
 #endif

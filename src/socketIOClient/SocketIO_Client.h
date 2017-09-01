@@ -27,14 +27,19 @@ private:
 	WebSocketsClient _webSocket;
 	int _lastPing;
 	std::map<String, std::function<void (const char * payload, size_t length)>> _events;
-	bool connected;
+	bool _connected;
+	bool _debug;
 
 	void trigger(const char* event, const char * payload, size_t length);
 	void webSocketEvent(WStype_t type, uint8_t * payload, size_t length);
   	void initialize();
 public:
 	SocketIO_Client();
+	SocketIO_Client(bool debug);
 	bool isConnected();
+	bool isDebugging();
+	void setDebugging(bool debug);
+        
     void beginSSL(const char* host, const int port = DEFAULT_PORT, const char* url = DEFAULT_URL, const char* fingerprint = DEFAULT_FINGERPRINT);
 	void begin(const char* host, const int port = DEFAULT_PORT, const char* url = DEFAULT_URL);
 	void loop();

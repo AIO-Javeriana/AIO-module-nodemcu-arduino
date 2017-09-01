@@ -91,3 +91,11 @@ void  SIOCommnuicationChannel::setHost(char * host){
 void  SIOCommnuicationChannel::setPort(int port){
     this->_port = port;
 }
+
+bool SIOCommnuicationChannel::isDebugging(){
+    return this->_webSocket.isDebugging();
+}
+
+void SIOCommnuicationChannel::setDebugging(bool debug){
+    this->_webSocket.setDebugging(debug);
+}

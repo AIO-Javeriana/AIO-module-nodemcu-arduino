@@ -1,10 +1,9 @@
 #include "AIOCommand.h"
 
-AIOCommand::AIOCommand(char* name,std::vector<char*> params,bool interruptible,bool service){
+AIOCommand::AIOCommand(char* name,std::vector<char*>& params,bool interruptible){
     this->_name = name;
-    this->_params = params;
+    this->_params = &params;
     this->_interruptible = interruptible;
-    this->_service = service;
 }
 
 char* AIOCommand::getName(){
@@ -16,11 +15,11 @@ void AIOCommand::setName(char* name){
 }
 
 std::vector<char*>& AIOCommand::getParameters(){
-    return this->_params;
+    return *this->_params;
 }
 
 void AIOCommand::setParameters(std::vector<char*>& params){
-    this->_params = params;
+    this->_params = &params;
 }
 
 bool AIOCommand::isInterruptible(){
@@ -31,16 +30,8 @@ void AIOCommand::setInterruptible(bool interruptible){
     this->_interruptible = interruptible;
 }
 
-bool AIOCommand::isService(){
-    return this->_service;
-}
-
-void AIOCommand::setService(bool service){
-    this->_service = service;
-}
-
-AIOActionCommand::AIOActionCommand(char* name,std::vector<char*>& params,bool interruptible,bool service,ACCEPT_WORK_FUNCTION acceptWork, EXECUTE_ACTION_COMMAND_FUNCTION executeCommand, ABORT_ACTION_COMMAND_FUNCTION abortCommand)
-                :AIOCommand(name,params,interruptible,service){
+AIOActionCommand::AIOActionCommand(char* name,std::vector<char*>& params,bool interruptible,ACCEPT_WORK_FUNCTION acceptWork, EXECUTE_ACTION_COMMAND_FUNCTION executeCommand, ABORT_ACTION_COMMAND_FUNCTION abortCommand)
+                :AIOCommand(name,params,interruptible){
      this->_acceptWork = acceptWork;
      this->_executeCommand = executeCommand;
      this->_abortCommand = abortCommand;
@@ -73,8 +64,8 @@ void AIOActionCommand::setAbortCommand(ABORT_ACTION_COMMAND_FUNCTION abortComman
 }
          
 
-AIOServiceCommand::AIOServiceCommand(char* name,std::vector<char*> params,bool interruptible,bool service,EXECUTE_SERVICE_FUNCTION executeService)
-                                    :AIOCommand(name,params,interruptible,service){
+AIOServiceCommand::AIOServiceCommand(char* name,std::vector<char*>& params,bool interruptible,EXECUTE_SERVICE_FUNCTION executeService)
+                                    :AIOCommand(name,params,interruptible){
     this->_executeService = executeService;
 }
 

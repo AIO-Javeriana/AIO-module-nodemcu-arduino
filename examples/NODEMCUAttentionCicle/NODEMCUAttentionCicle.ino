@@ -3,39 +3,42 @@
 #include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
 #include <vector>
-#include "AIOModule.h"
+#include <AIOModule.h>
 
 #define PARAMETERS JsonObject
 
-char* ssid = "AIO";
-char* password = "";
+char* ssid = "AIO";//wifi network name
+char* password = "";//wifi network password
 bool isSync = false;
 
 SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance();
-AIOState state("NODEMCU");
+AIOState state("NODEMCU-ATTENTION_CYCLE");
 AIOModule& module=AIOModule::getInstance();
+
 bool acceptWorkATTENTION_CYCLE(AIOState& state,PARAMETERS& parameters){
-    Serial.println(" acceptWorkATTENTION_CYCLE <<<<-----");
+    Serial.println("[ATTENTION_CYCLE]:acceptWork");
     return true;
 }
 
-bool executeServiceATTENTION_CYCLE(AIOState& state,CommunicationChannel*& communicationChannel,PARAMETERS& parameters){
-    delay(1000);
+bool executeCommandATTENTION_CYCLE(AIOState& state,CommunicationChannel*& communicationChannel,PARAMETERS& parameters){
+    Serial.println("[ATTENTION_CYCLE]:executeCommand");
+    delay(2000);
     return true;
 }
 
-bool abortServiceATTENTION_CYCLE(AIOState& state,CommunicationChannel*& communicationChannel){
-    delay(1000);
+bool abortCommandATTENTION_CYCLE(AIOState& state,CommunicationChannel*& communicationChannel){
+    Serial.println("[ATTENTION_CYCLE]:abortCommand");
+    delay(2000);
     return true;
 }
 
-std::vector<char*> params;
-AIOActionCommand attention_cycle("ATTENTION_CYCLE",params,false,false,acceptWorkATTENTION_CYCLE,executeServiceATTENTION_CYCLE,abortServiceATTENTION_CYCLE);
+AIOActionCommand attention_cycle("ATTENTION_CYCLE",*(new std::vector<char*>()),false,acceptWorkATTENTION_CYCLE,executeCommandATTENTION_CYCLE,abortCommandATTENTION_CYCLE);
 
 void setup() {
   Serial.begin(115200);
   Serial.println();
-  params.push_back("none");
+  commnuicationChannel.setDebugging(true);
+  attention_cycle.getParameters().push_back("none");
   module.setState(state);
   module.setCommunicationChannel(&commnuicationChannel);
   module.addCommand(attention_cycle);
@@ -60,7 +63,6 @@ void moduleSync(){
       Serial.printf("Sync with %s:%d \n",commnuicationChannel.getHost(),commnuicationChannel.getPort());
       module.setup();
   } 
-  //*/
 }
 
 void loop() {

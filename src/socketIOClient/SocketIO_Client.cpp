@@ -16,21 +16,40 @@ const String getEventPayload(const String msg) {
 }
 
 SocketIO_Client::SocketIO_Client(){
-	this->connected = false;
+	this->_connected = false;
+	this->_debug = false;
 }
 
-bool SocketIO_Client::isConnected(){
-	return this->connected;
+SocketIO_Client::SocketIO_Client(bool debug){
+	this->_connected = false;
+	this->_debug = debug;
 }
+
+
+bool SocketIO_Client::isConnected(){
+	return this->_connected;
+}
+
+bool SocketIO_Client::isDebugging(){
+    return this->_debug;
+}
+
+void SocketIO_Client::setDebugging(bool debug){
+    this->_debug =  debug;
+}
+
 
 void SocketIO_Client::webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 	String msg;
 	switch(type) {
 		case WStype_DISCONNECTED:
-			SOCKETIOCLIENT_DEBUG("[SIoC] Disconnected!\n");
+			this->_connected = false;
+			if (this->_debug)
+				SOCKETIOCLIENT_DEBUG("[SIoC] Disconnected!\n");
 			break;
 		case WStype_CONNECTED:
-			SOCKETIOCLIENT_DEBUG("[SIoC] Connected to url: %s\n",  payload);
+			if (this->_debug)
+				SOCKETIOCLIENT_DEBUG("[SIoC] Connected to url: %s\n",  payload);
 			break;
 		case WStype_TEXT:
 			msg = String((char*)payload);
@@ -39,15 +58,16 @@ void SocketIO_Client::webSocketEvent(WStype_t type, uint8_t * payload, size_t le
 			} else if(msg.startsWith("2")) {
 				_webSocket.sendTXT("3");
 			} else if(msg.startsWith("40")) {
-				this->connected = true;
+				this->_connected = true;
 				trigger("connect", NULL, 0);
 			} else if(msg.startsWith("41")) {
-				this->connected = false;
+				this->_connected = false;
 				trigger("disconnect", NULL, 0);
 			}
 			break;
 		case WStype_BIN:
-			SOCKETIOCLIENT_DEBUG("[SIoC] get binary length: %u\n", length);
+			if (this->_debug)
+				SOCKETIOCLIENT_DEBUG("[SIoC] get binary length: %u\n", length);
 			hexdump(payload, length);
 		break;
 	}
@@ -72,7 +92,8 @@ void SocketIO_Client::loop() {
 	_webSocket.loop();
 	for(auto packet=_packets.begin(); packet != _packets.end();) {
 		if(_webSocket.sendTXT(*packet)) {
-			SOCKETIOCLIENT_DEBUG("[SIoC] packet \"%s\" emitted\n", packet->c_str());
+			if (this->_debug)
+				SOCKETIOCLIENT_DEBUG("[SIoC] packet \"%s\" emitted\n", packet->c_str());
 			packet = _packets.erase(packet);
 		} else {
 			++packet;
@@ -100,16 +121,19 @@ void SocketIO_Client::emit(const char* event, const char * payload) {
 		msg += "\"";
 	}
 	msg += "]";
-	SOCKETIOCLIENT_DEBUG("[SIoC] add packet %s\n", msg.c_str());
+	if (this->_debug)
+		SOCKETIOCLIENT_DEBUG("[SIoC] add packet %s\n", msg.c_str());
 	_packets.push_back(msg);
 }
 
 void SocketIO_Client::trigger(const char* event, const char * payload, size_t length) {
 	auto e = _events.find(event);
 	if(e != _events.end()) {
-		SOCKETIOCLIENT_DEBUG("[SIoC] trigger event %s\n", event);
+		if (this->_debug)
+			SOCKETIOCLIENT_DEBUG("[SIoC] trigger event %s\n", event);
 		e->second(payload, length);
 	} else {
-		SOCKETIOCLIENT_DEBUG("[SIoC] event %s not found. %d events available\n", event, _events.size());
+		if (this->_debug)
+			SOCKETIOCLIENT_DEBUG("[SIoC] event %s not found. %d events available\n", event, _events.size());
 	}
 }

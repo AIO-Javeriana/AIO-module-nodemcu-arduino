@@ -18,19 +18,16 @@
 class AIOCommand {
     protected:
         char* _name;
-        std::vector<char*> _params;
+        std::vector<char*>* _params;
         bool _interruptible;
-        bool _service;
     public:
-         AIOCommand(char* name,std::vector<char*> params,bool interruptible,bool service);
+         AIOCommand(char* name,std::vector<char*>& params,bool interruptible);
          char* getName();
          void setName(char* name);
          std::vector<char*>& getParameters();
          void setParameters(std::vector<char*>& params);
          bool isInterruptible();
          void setInterruptible(bool interruptible);
-         bool isService();
-         void setService(bool service);
 };
 
 class AIOActionCommand: public AIOCommand{
@@ -40,7 +37,7 @@ class AIOActionCommand: public AIOCommand{
         ABORT_ACTION_COMMAND_FUNCTION _abortCommand;
     public:
          AIOActionCommand(char* name,
-                         std::vector<char*> &params,bool interruptible,bool service,
+                         std::vector<char*> &params,bool interruptible,
                          ACCEPT_WORK_FUNCTION acceptWork,
                          EXECUTE_ACTION_COMMAND_FUNCTION executeCommand,
                          ABORT_ACTION_COMMAND_FUNCTION abortCommand);
@@ -57,7 +54,7 @@ class AIOServiceCommand: public AIOCommand{
     protected:
          EXECUTE_SERVICE_FUNCTION _executeService;
     public:
-         AIOServiceCommand(char* name,std::vector<char*> params,bool interruptible,bool service,EXECUTE_SERVICE_FUNCTION executeService);
+         AIOServiceCommand(char* name,std::vector<char*>& params,bool interruptible,EXECUTE_SERVICE_FUNCTION executeService);
          EXECUTE_SERVICE_FUNCTION getExecuteService();
          void setExecuteService(EXECUTE_SERVICE_FUNCTION executeService);        
 };

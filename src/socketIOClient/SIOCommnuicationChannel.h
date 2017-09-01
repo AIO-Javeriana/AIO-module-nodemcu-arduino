@@ -47,6 +47,9 @@ class SIOCommnuicationChannel: public CommunicationChannel{
         int   getPort();
         void  setHost(char * host);
         void  setPort(int port);
+        bool isDebugging();
+	    void setDebugging(bool debug);
+    
 };
 
 #endif

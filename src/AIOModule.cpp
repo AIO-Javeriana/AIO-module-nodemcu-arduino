@@ -185,7 +185,7 @@ void AIOModule::setup(){
         }
         sJSON += "\\\"SERVICE\\\":false,";
         sJSON += "\\\"PARAMS\\\":[";
-        for (int i = 0;i < it->second->getParameters().size();i++ ){
+        for (int i = 0;i < it->second->getParameters().size();++i ){
             sJSON += "\\\"";
             sJSON += it->second->getParameters()[i];
             sJSON += "\\\",";
@@ -202,13 +202,13 @@ void AIOModule::setup(){
         }else{
             sJSON += "\\\"INTERRUPTIBLE\\\":false,";
         }
-        sJSON += "\\\"SERVICE\\\":false,";
+        sJSON += "\\\"SERVICE\\\":true,";
         sJSON += "\\\"PARAMS\\\":[";
-        for (int i = 0;i < it->second->getParameters().size();i++ ){
+        for (int i = 0;i < it->second->getParameters().size();++i ){
             sJSON += "\\\"";
             sJSON += it->second->getParameters()[i];
             sJSON += "\\\",";
-        }    
+        }
         sJSON += "]},";
     }
     sJSON += "]}";
@@ -242,11 +242,11 @@ void AIOModule::loop(){
         replayJSON += this->_state.getModule_id();
         replayJSON += "\\\",\\\"EVENT_NAME\\\":\\\"";
         replayJSON += toString(CommunicationEventsTypes::SENSOR_SERVICE);
-        replayJSON += "\\\",\\\"SENSOR_SERVICE_NAME\\\":";
+        replayJSON += "\\\",\\\"SENSOR_SERVICE_NAME\\\":\\\"";
         replayJSON += it->first;
-        replayJSON += ",\\\"DATA\\\":\\\"";
+        replayJSON += "\\\",\\\"DATA\\\":";
         replayJSON += it->second->getExecuteService()(this->_state,this->_communicationChannel);
-        replayJSON += "\\\"}";
+        replayJSON += "}";
         this->_communicationChannel->emitEvent(toString(CommunicationEventsTypes::SENSOR_SERVICE),replayJSON.c_str());        
     }
     
