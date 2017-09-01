@@ -80,7 +80,6 @@ void AIOModule::onWORK_ASSIGNATION(const char * payload, size_t length){
     replayJSON += ",\\\"GROUP_ID\\\":";
     replayJSON += group_id;
     replayJSON += ",\\\"REPLY\\\":\\\"";
-    //PRINT("WORK_ASSIGNATION-> %s, %s, %d \n", (command_name.c_str()),group_id.c_str(),this->_actions.size());
     std::map<COMMAND_NAME, AIOActionCommand* >::iterator it = this->_actions.find(command_name);
     if (it != this->_actions.end()){
         if (it->second->getIsAcceptWork()(this->_state,parameters)){
@@ -168,6 +167,17 @@ void AIOModule::onALL_BEGINS(const char * payload, size_t length){
     }
 }
 
+/*
+{"MODULE_ID":"NOMBRE_DEL_MODULO",
+ "EVENT_NAME":"REGISTRATION",
+ "COMMANDS":[
+            {"COMMAND":"NOMBRE_DEL_COMANDO",
+            "INTERRUPTIBLE":false,
+            "SERVICE":false,
+            "PARAMS":["PARAM1","PARAM2"]
+            },
+            ]
+}//*/
 void AIOModule::setup(){
     String sJSON = String("{\\\"MODULE_ID\\\":\\\"");
     sJSON += this->_state.getModule_id();
@@ -252,16 +262,16 @@ void AIOModule::loop(){
     
 }
 
-void AIOModule::addCommand(AIOActionCommand& command){
-        this->_actions[command.getName()] = &command;
-}
-
 bool AIOModule::isDebugging(){
     return this->_debug;
 }
 
 void AIOModule::setDebugging(bool debug){
     this->_debug =  debug;
+}
+
+void AIOModule::addCommand(AIOActionCommand& command){
+        this->_actions[command.getName()] = &command;
 }
 
 void AIOModule::addCommand(AIOServiceCommand& command){

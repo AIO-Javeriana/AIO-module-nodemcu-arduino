@@ -81,15 +81,12 @@ const int DERIVATIVE_ACTION = 0;
 // DEFINE GLOBAL VARIABLES
 //============================================================================//
 
-//char* ssid = "AIO";//wifi network name
-//char* password = "";//wifi network password
-char* ssid = "BERMEOA";
-char* password = "Meje015$";
+char* ssid = "AIO";//wifi network name
+char* password = "";//wifi network password
 bool isSync = false;
 
 SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance();
 MobilityModuleState mmstate("NODEMCU-MOBILITY-MODULE");
-AIOState state("NODEMCU-MOBILITY-MODULE");
 AIOModule& module=AIOModule::getInstance();
 //============================================================================//
 // DEFINE GLOBAL CONTROLS
@@ -299,7 +296,7 @@ bool executeCommandMOVE(AIOState& state,CommunicationChannel*& communicationChan
     Serial.println("[MOVE]:executeCommand");
     //MobilityModuleState& _state = dynamic_cast<MobilityModuleState&>(state); //ERROR: 'dynamic_cast' not permitted with -fno-rtti
     if (mmstate.getMMState() == MMState::FINISHED){
-        String d =((const char *)parameters["DIRECTION"]);
+        String d =((const char *)parameters["DIRECTION"]);//NONE, TURN_RIGHT,TURN_LEFT 
         direction = 0;
         if (d.equals("TURN_RIGHT")){
             direction = 1;
@@ -346,6 +343,7 @@ void setup() {
   //automaticCalibration1();
   commnuicationChannel.setDebugging(true);
   moveCommand.getParameters().push_back("DIRECTION");//NONE, TURN_RIGHT,TURN_LEFT 
+  
   Serial.printf("size -> %d",moveCommand.getParameters().size());
   module.setState(mmstate);
   module.setCommunicationChannel(&commnuicationChannel);

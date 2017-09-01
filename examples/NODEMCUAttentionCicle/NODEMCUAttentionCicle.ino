@@ -11,9 +11,9 @@ char* ssid = "AIO";//wifi network name
 char* password = "";//wifi network password
 bool isSync = false;
 
-SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance();
+SIOCommnuicationChannel commnuicationChannel = SIOCommnuicationChannel::getInstance();//Singleton
 AIOState state("NODEMCU-ATTENTION_CYCLE");
-AIOModule& module=AIOModule::getInstance();
+AIOModule& module = AIOModule::getInstance();//Singleton
 
 bool acceptWorkATTENTION_CYCLE(AIOState& state,PARAMETERS& parameters){
     Serial.println("[ATTENTION_CYCLE]:acceptWork");
