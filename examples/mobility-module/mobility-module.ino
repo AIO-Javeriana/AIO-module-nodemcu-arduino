@@ -34,7 +34,7 @@ class MobilityModuleState: public AIOState{
 //============================================================================//
 // DEFINE PINS
 //============================================================================//
-// Define rigth motor pin.
+// Define right motor pin.
 #define RIGTH_MOTOR                   D8
 // Define left motor pin.
 #define LEFT_MOTOR                    D7
@@ -71,7 +71,7 @@ class MobilityModuleState: public AIOState{
 //============================================================================//
 // Define the cero for left motor speed.
 const int SPEED_DEGREE_CERO_LM = 94;
-// Define the cero for rigth motor speed.
+// Define the cero for right motor speed.
 const int SPEED_DEGREE_CERO_RM = 93;
 // Define the proportional action of 1/6
 const int PROPORTIONAL_ACTION = 1;
@@ -91,7 +91,7 @@ AIOModule& module=AIOModule::getInstance();
 //============================================================================//
 // DEFINE GLOBAL CONTROLS
 //============================================================================//
-// Define the control for rigth motor.
+// Define the control for right motor.
 Servo rigthServo;
 // Define the control for left motor.
 Servo leftServo;
@@ -123,7 +123,7 @@ void setSpeedMotor(Servo &servo,int speedValue, int speed_degree_cero,bool inves
 }
 /// Set the speed to servos.
 /// int leftSp: Speed pf left servo.
-/// int rigthSp: Speed pf rigth servo.
+/// int rigthSp: Speed pf right servo.
 void setSpeeds(int leftSp, int rigthSp) {
   setSpeedMotor(leftServo,leftSp,SPEED_DEGREE_CERO_LM,true);
   setSpeedMotor(rigthServo,rigthSp,SPEED_DEGREE_CERO_RM,false);
